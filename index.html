@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M Vian Saputra</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-blur">
+    </div>
+    <div class="login-container">
+        <h1 class="logo-text">
+            
+            <span class="site">Welcome</span>
+        </h1>
+        
+        
+      <div class="img src=ngawipp.jpg">
+        <div id="error-message" class="error-message"></div>
+   
+
+      
+        <form id="login-form" class="login-form">
+            <input type="text" placeholder="username" id="username" required>
+            <input type="password" placeholder="password" id="password" required>
+            <button type="submit" class="login-button">Login</button>
+        </form>
+    </div>
+
+   
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+
+      
+            
+        
+            if (username === "admin" && password === "123") {
+                errorMessage.style.display = 'none';
+                window.location.href = 'dashboard.html';
+            } 
+           
+            else {
+                errorMessage.textContent = 'Username atau Password salah.';
+                errorMessage.style.display = 'block'; 
+                document.getElementById('password').value = '';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Tebak Angka</title>
+    <style>
+        
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            width: 70%;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+        }
+        
+        button:last-child {
+            margin-right: 0;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
+            min-height: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        #history {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            max-height: 150px;
+            overflow-y: auto;
+            text-align: left;
+        }
+        
+        .history-item {
+            padding: 2px 0;
+            border-bottom: 1px dotted #eee;
+            font-size: 14px;
+        }
+        
+        .history-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TEBAK ANGKA</h1>
+        <p>Saya sudah memikirkan sebuah angka antara 1 sampai 100. Coba tebak!</p>
+
+        <input type="number" id="guessInput" min="1" max="100" placeholder="Masukkan Angka">
+        <button id="submitButton">TEBAK</button>
+        <button id="resetButton" style="display: none;">MAIN LAGI</button>
+
+        <div id="message"></div>
+        
+        <h3>Riwayat Tebakan:</h3>
+        <div id="history">Belum ada tebakan.</div>
+    </div>
+
+    <script>
+        let secretNumber;
+        let guesses = 0;
+        let maxGuesses = 7;
+        const guessInput = document.getElementById('guessInput');
+        const submitButton = document.getElementById('submitButton');
+        const resetButton = document.getElementById('resetButton');
+        const message = document.getElementById('message');
+        const historyDiv = document.getElementById('history');
+
+        function startGame() {
+            secretNumber = Math.floor(Math.random() * 100) + 1; 
+            guesses = 0;
+            
+            message.textContent = `Anda punya ${maxGuesses} kesempatan.`;
+            message.style.backgroundColor = 'transparent';
+            message.style.color = '#333';
+            
+            guessInput.value = '';
+            guessInput.disabled = false;
+            submitButton.disabled = false;
+            
+            submitButton.style.display = 'inline-block';
+            resetButton.style.display = 'none';
+            
+            historyDiv.innerHTML = 'Belum ada tebakan.';
+        }
+
+        function checkGuess() {
+            const userGuess = parseInt(guessInput.value);
+
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+                message.textContent = 'Masukkan angka yang valid antara 1 dan 100.';
+                message.style.backgroundColor = '#f8d7da';
+                message.style.color = '#721c24';
+                return;
+            }
+
+            guesses++;
+            
+            const historyItem = document.createElement('div');
+            historyItem.classList.add('history-item');
+            
+            if (historyDiv.textContent === 'Belum ada tebakan.') {
+                 historyDiv.innerHTML = '';
+            }
+
+            if (userGuess === secretNumber) {
+                message.textContent = `SELAMAT! Anda benar! Angka rahasia adalah ${secretNumber}. Anda menebak dalam ${guesses} kali.`;
+                message.style.backgroundColor = '#d4edda';
+                message.style.color = '#155724';
+                
+                historyItem.textContent = `${guesses}. Tebakan: ${userGuess} - BENAR!`;
+                
+                endGame(true);
+            } else if (guesses >= maxGuesses) {
+                message.textContent = `KESEMPATAN HABIS! Angka rahasia adalah ${secretNumber}. Coba lagi.`;
+                message.style.backgroundColor = '#f8d7da';
+                message.style.color = '#721c24';
+
+                historyItem.textContent = `${guesses}. Tebakan: ${userGuess} - SALAH, KESEMPATAN HABIS!`;
+
+                endGame(false);
+            } else if (userGuess < secretNumber) {
+                message.textContent = 'Terlalu KECIL! Coba lagi.';
+                message.style.backgroundColor = '#fff3cd';
+                message.style.color = '#856404';
+
+                historyItem.textContent = `${guesses}. Tebakan: ${userGuess} - Terlalu KECIL`;
+            } else if (userGuess > secretNumber) {
+                message.textContent = 'Terlalu BESAR! Coba lagi.';
+                message.style.backgroundColor = '#fff3cd';
+                message.style.color = '#856404';
+                
+                historyItem.textContent = `${guesses}. Tebakan: ${userGuess} - Terlalu BESAR`;
+            }
+            
+            historyDiv.prepend(historyItem);
+            guessInput.value = '';
+            guessInput.focus();
+        }
+
+        function endGame(isWin) {
+            guessInput.disabled = true;
+            submitButton.disabled = true;
+            submitButton.style.display = 'none';
+            resetButton.style.display = 'inline-block';
+        }
+
+        window.onload = startGame; 
+
+        submitButton.addEventListener('click', checkGuess);
+
+        resetButton.addEventListener('click', startGame);
+
+        guessInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkGuess();
+            }
+        });
+
+    </script>
+</body>
+</html>

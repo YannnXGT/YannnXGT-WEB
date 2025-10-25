@@ -1,0 +1,134 @@
+/* Atur font dan pastikan body menempati seluruh layar */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ================= LATAR BELAKANG BLUR ================= */
+.background-blur {
+    position: fixed; /* Tetap di tempat saat scroll (jika konten ditambahkan) */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Posisikan di bawah semua elemen */
+    
+    /* Ganti URL gambar di bawah ini dengan gambar latar belakang Anda */
+    background-image: url('mybini.jpg'); 
+    background-size: cover;
+    background-position: center;
+    
+    /* Efek Blur yang Kuat */
+    filter: blur(15px); 
+}
+
+/* Kontainer Utama untuk Header dan Profil */
+.main-content {
+    flex-grow: 1; /* Memastikan konten mengisi sisa ruang */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Elemen di dalamnya rata kiri */
+    padding: 30px;
+    position: relative;
+}
+
+/* ================= HEADER (NAVIGASI) ================= */
+.navbar-top-left {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 50px; /* Jarak antara nav dan kotak profil */
+    padding: 10px 0;
+}
+
+.nav-item {
+    color: black; /* Warna teks gelap */
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-item:hover {
+    color: #4A90E2; /* Efek hover biru */
+}
+
+/* ================= KOTAK PROFIL DI TENGAH ================= */
+.profile-box {
+    display: flex;
+    align-items: center;
+    /* Posisikan di tengah layar secara vertikal dan sedikit ke kanan (sesuai gambar) */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    /* Atur lebar dan tinggi agar terlihat lebih rapi */
+    width: 80%; 
+    max-width: 800px;
+    padding: 20px;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; /* Membuat gambar menjadi lingkaran */
+    border: 5px solid white; /* Border putih tipis (sesuai gambar) */
+    object-fit: cover;
+    margin-right: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Bayangan tipis */
+}
+
+.profile-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.title-text {
+    font-size: 2.5em;
+    margin: 0;
+    color: black; /* Warna teks gelap agar terbaca */
+    font-weight: 500;
+}
+
+.subtitle-text {
+    font-size: 1.2em;
+    margin: 5px 0 0 0;
+    color: #555; /* Warna teks abu-abu muda */
+    font-weight: 300;
+}
+
+/* ================= FOOTER (YannnXGT) ================= */
+.footer {
+    width: 100%;
+    background-color: black;
+    color: white;
+    padding: 15px 30px;
+    box-sizing: border-box;
+    z-index: 10;
+}
+
+.username-text {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+/* Responsif Dasar */
+@media (max-width: 600px) {
+    .profile-box {
+        flex-direction: column;
+        text-align: center;
+    }
+    .profile-image {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+    .navbar-top-left {
+        gap: 15px;
+    }
+}

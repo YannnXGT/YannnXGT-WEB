@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Suit (Batu, Kertas, Gunting)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #e8eaf6;
+            color: #333;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #3f51b5;
+            margin-bottom: 10px;
+        }
+        
+        #score-board {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px solid #c5cae9;
+            border-radius: 10px;
+            background-color: #f5f6fa;
+        }
+        
+        .score {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .score span {
+            display: block;
+            font-size: 36px;
+            color: #ff9800;
+        }
+
+        #choices {
+            margin-top: 30px;
+        }
+
+        .choice-button {
+            padding: 15px 25px;
+            font-size: 24px;
+            margin: 0 8px;
+            background-color: #3f51b5;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .choice-button:hover {
+            background-color: #303f9f;
+            transform: translateY(-2px);
+        }
+
+        #result {
+            margin-top: 25px;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            min-height: 20px;
+            border-radius: 8px;
+        }
+
+        #result.win {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        #result.lose {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        #result.draw {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        #resetButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        #resetButton:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SUIT (Batu, Kertas, Gunting)</h1>
+
+        <div id="score-board">
+            <div class="score">
+                Anda
+                <span id="playerScore">0</span>
+            </div>
+            <div class="score">
+                Komputer
+                <span id="compScore">0</span>
+            </div>
+        </div>
+
+        <p>Pilih gerakan Anda:</p>
+        
+        <div id="choices">
+            <button class="choice-button" data-choice="batu">✊</button>
+            <button class="choice-button" data-choice="kertas">✋</button>
+            <button class="choice-button" data-choice="gunting">✌️</button>
+        </div>
+
+        <div id="result">Pilih Batu, Kertas, atau Gunting untuk memulai!</div>
+        
+        <button id="resetButton">RESET SKOR</button>
+    </div>
+
+    <script>
+        let playerScore = 0;
+        let compScore = 0;
+        const playerSpan = document.getElementById('playerScore');
+        const compSpan = document.getElementById('compScore');
+        const resultDiv = document.getElementById('result');
+        const choicesDiv = document.getElementById('choices');
+        const resetButton = document.getElementById('resetButton');
+
+        function getComputerChoice() {
+            const choices = ['batu', 'kertas', 'gunting'];
+            const randomIndex = Math.floor(Math.random() * 3);
+            return choices[randomIndex];
+        }
+
+        function determineWinner(playerChoice, computerChoice) {
+            if (playerChoice === computerChoice) {
+                return 'draw';
+            } else if (
+                (playerChoice === 'batu' && computerChoice === 'gunting') ||
+                (playerChoice === 'kertas' && computerChoice === 'batu') ||
+                (playerChoice === 'gunting' && computerChoice === 'kertas')
+            ) {
+                return 'win';
+            } else {
+                return 'lose';
+            }
+        }
+
+        function displayResult(playerChoice, computerChoice, outcome) {
+            let message = '';
+            
+            resultDiv.className = '';
+            resultDiv.classList.add(outcome);
+
+            if (outcome === 'win') {
+                playerScore++;
+                message = `Anda menang! ${playerChoice.toUpperCase()} mengalahkan ${computerChoice.toUpperCase()}.`;
+            } else if (outcome === 'lose') {
+                compScore++;
+                message = `Anda kalah! ${computerChoice.toUpperCase()} mengalahkan ${playerChoice.toUpperCase()}.`;
+            } else {
+                message = `Seri! Kedua pemain memilih ${playerChoice.toUpperCase()}.`;
+            }
+
+            playerSpan.textContent = playerScore;
+            compSpan.textContent = compScore;
+            resultDiv.textContent = message;
+        }
+
+        function play(playerChoice) {
+            const computerChoice = getComputerChoice();
+            const outcome = determineWinner(playerChoice, computerChoice);
+            displayResult(playerChoice, computerChoice, outcome);
+        }
+        
+        function resetGame() {
+            playerScore = 0;
+            compScore = 0;
+            playerSpan.textContent = 0;
+            compSpan.textContent = 0;
+            resultDiv.textContent = 'Pilih Batu, Kertas, atau Gunting untuk memulai!';
+            resultDiv.className = '';
+        }
+
+        choicesDiv.addEventListener('click', function(e) {
+            if (e.target.classList.contains('choice-button')) {
+                const playerChoice = e.target.getAttribute('data-choice');
+                play(playerChoice);
+            }
+        });
+        
+        resetButton.addEventListener('click', resetGame);
+
+    </script>
+</body>
+</html>
